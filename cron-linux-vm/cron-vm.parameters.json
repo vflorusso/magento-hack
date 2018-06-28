@@ -1,0 +1,27 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "value": "vito"
+    },
+    "adminPassword": {
+      "value": "MySecret.1234"
+    },
+    "dnsLabelPrefix": {
+      "value": "vitolocentosvm"
+    },
+    "vmName": {
+      "value": "vitolocentosvm"
+    },
+    "vnetRGname": {
+      "value": "vitotestnetwork"
+    },
+    "vnetName": {
+      "value": "st-prod-aks-vnet"
+    },
+    "subnetName": {
+      "value": "softnas-cron-subnet"
+    }
+  }
+}
