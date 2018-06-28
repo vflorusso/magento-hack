@@ -34,27 +34,6 @@
       "minValue": 0,
       "maxValue": 1023
     },
-    "virtualNetworkName": {
-      "type": "string",
-      "defaultValue": "[concat(parameters('dnsNamePrefix'), 'Vnet')]",
-      "metadata": {
-        "description": "VNET Name"
-      }
-    },
-    "virtualNetworkResourceGroup": {
-      "type": "string",
-      "defaultValue": "[concat(resourceGroup().name, 'Networking')]",
-      "metadata": {
-        "description": "Resource Group VNET is deployed in"
-      }
-    },
-    "subnet1Name": {
-      "type": "string",
-      "defaultValue": "[concat(parameters('dnsNamePrefix'), 'ClusterSubnet')]",
-      "metadata": {
-        "description": "Name of the subnet inside the VNET"
-      }
-    },
     "adminUsername": {
       "type": "string",
       "defaultValue": "azureuser",
@@ -116,7 +95,7 @@
         },
         "addonProfiles": {
           "httpApplicationRouting": {
-            "enabled": true
+            "enabled": "[variables('enableHttpApplicationRouting')]"
           }
         },
         "enableRBAC": true,
