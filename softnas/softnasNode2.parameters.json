@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "virtualMachineName": {
-            "value": "vitosoftnas01"
+            "value": "vitosoftnas02"
         },
         "virtualMachineSize": {
             "value": "Standard_D2s_v3"
@@ -36,7 +36,7 @@
             "value": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/softnas/"
         },
         "privateIpAddress": {
-            "value": "10.0.0.4"
+            "value": "10.0.0.5"
         }
     }
 }

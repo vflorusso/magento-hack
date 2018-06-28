@@ -6,47 +6,45 @@
       "value": "st-prod-aks-vnet"
     },
     "subnetName": {
-      "value": "softnas-cron-subnet"
+      "value": "st-prod-aks-subnet"
     },
     "addressPrefix": {
       "value": "10.16.0.0/16"
     },
     "nsg": {
-      "value": 
-        {
-          "nsgName": "new-nsg",
-          "nsgRules": [
-            {
-              "name": "SSH",
-              "properties": {
-                "description": "Allows SSH traffic",
-                "protocol": "Tcp",
-                "sourcePortRange": "*",
-                "destinationPortRange": "22",
-                "sourceAddressPrefix": "*",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 100,
-                "direction": "Inbound"
-              }
-            },
-            {
-              "name": "HTTPS",
-              "properties": {
-                "description": "Allows HTTPS traffic",
-                "protocol": "Tcp",
-                "sourcePortRange": "*",
-                "destinationPortRange": "443",
-                "sourceAddressPrefix": "*",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 101,
-                "direction": "Inbound"
-              }
+      "value": {
+        "nsgName": "new-nsg",
+        "nsgRules": [
+          {
+            "name": "SSH",
+            "properties": {
+              "description": "Allows SSH traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
             }
-          ]
-        }
-      
+          },
+          {
+            "name": "HTTPS",
+            "properties": {
+              "description": "Allows HTTPS traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
     }
   }
 }

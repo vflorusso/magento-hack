@@ -68,8 +68,8 @@
         "availabilitySetName": "[concat(resourceGroup().name,'-avset')]",
         "availabilitySetPlatformFaultDomainCount": "2",
         "availabilitySetPlatformUpdateDomainCount": "5",
-        "diagnosticsStorageAccountName": "[concat(parameters('virtualMachineName'),'-ip')]",
-        "publicIpAddressName": "[concat(parameters('virtualMachineName'),'-avset')]",
+        "diagnosticsStorageAccountName": "[concat(parameters('virtualMachineName'),'diags')]",
+        "publicIpAddressName": "[concat(parameters('virtualMachineName'),'-ip')]",
         "bashScriptUri": "[concat(parameters('bashScriptBaseUri'),parameters('bashScriptName'))]",
         "msiExtensionName": "ManagedIdentityExtensionForLinux",
         "subnetRef": "[resourceId(parameters('virtualNetworkRGName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
@@ -124,57 +124,58 @@
                 },
                 "availabilitySet": {
                     "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]"
-                },
-                "resources": [
-                    {
-                      "type": "extensions",
-                      "name": "[concat(parameters('virtualMachineName'), '-monitoring')]",
-                      "apiVersion": "2017-12-01",
-                      "location": "[parameters('location')]",
-                      "dependsOn": [
+                }
+            },
+            "resources": [
+                {
+                    "type": "extensions",
+                    "name": "[concat(parameters('virtualMachineName'), '-monitoring')]",
+                    "apiVersion": "2017-12-01",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
                         "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-                      ],
-                      "properties": {
+                    ],
+                    "properties": {
                         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                         "type": "OmsAgentForLinux",
                         "typeHandlerVersion": "1.0",
                         "autoUpgradeMinorVersion": true,
                         "settings": {
-                          "workspaceId": "[parameters('workspaceId')]"
+                            "workspaceId": "[parameters('workspaceId')]"
                         },
                         "protectedSettings": {
-                          "workspaceKey": "[parameters('workspaceKey')]"
+                            "workspaceKey": "[parameters('workspaceKey')]"
                         }
-                      }
-                    },
-                    {
-                      "name": "configure-cron-vm",
-                      "type": "extensions",
-                      "location": "[resourceGroup().location]",
-                      "apiVersion": "2017-12-01",
-                      "dependsOn": [
+                    }
+                },
+                {
+                    "name": "configure-cron-vm",
+                    "type": "extensions",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2017-12-01",
+                    "dependsOn": [
                         "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-                      ],
-                      "tags": {
+                    ],
+                    "tags": {
                         "displayName": "config-app"
-                      },
-                      "properties": {
+                    },
+                    "properties": {
                         "publisher": "Microsoft.Azure.Extensions",
                         "type": "CustomScript",
                         "typeHandlerVersion": "2.0",
                         "autoUpgradeMinorVersion": true,
                         "settings": {
-                          "skipDos2Unix":false
+                            "skipDos2Unix": false
                         },
                         "protectedSettings": {
-                           "commandToExecute": "[concat('./',parameters('bashScriptName'))]",
-                           "fileUris": ["[variables('bashScriptUri')]"]
+                            "commandToExecute": "[concat('./',parameters('bashScriptName'))]",
+                            "fileUris": [
+                                "[variables('bashScriptUri')]"
+                            ]
                         }
-                      }
-                    }          
-                  ]
-          
-            },
+                    }
+                }
+            ],
             "plan": {
                 "name": "mp_enterprise_1tb",
                 "publisher": "softnas",
@@ -258,7 +259,7 @@
             "apiVersion": "2017-08-01",
             "location": "[parameters('location')]",
             "properties": {
-                "publicIPAllocationMethod": "Dynamic"
+                "publicIPAllocationMethod": "Static"
             },
             "sku": {
                 "name": "Standard"
