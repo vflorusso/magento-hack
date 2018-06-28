@@ -30,13 +30,13 @@
       "value": "st-prod-aks-vnet"
     },
     "vnet2AddressPrefix": {
-      "value": "10.16.0.0/12"
+      "value": "11.0.0.0/12"
     },
     "vnet2subnet1Name": {
-      "value": "softnas-cron-subnet"
+      "value": "st-prod-aks-subnet"
     },
     "vnet2subnet1Prefix": {
-      "value": "10.16.0.0/16"
+      "value": "11.0.0.0/16"
     }    
   }
 }
