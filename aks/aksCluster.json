@@ -80,8 +80,7 @@
   },
   "variables": {
     "agentsEndpointDNSNamePrefix": "agent",
-    "enableHttpApplicationRouting": true,
-    "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+    "enableHttpApplicationRouting": true
   },
   "resources": [
     {
