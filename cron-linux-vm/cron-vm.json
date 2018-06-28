@@ -20,24 +20,6 @@
         "description": "Password for the Virtual Machine."
       }
     },
-    "subnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Subnet name"
-      }
-    },
-    "vnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Vnet name"
-      }
-    },
-    "vnetRGname": {
-      "type": "string",
-      "metadata": {
-        "description": "Resource group containing the vnet"
-      }
-    },
     "dnsLabelPrefix": {
       "type": "string",
       "metadata": {
@@ -52,6 +34,24 @@
       ],
       "metadata": {
         "description": "The CentOS version for the VM. This will pick a fully patched image of this given CentOS version."
+      }
+    },
+    "vnetRGname": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group containing the vnet"
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Vnet name"
+      }
+    },    
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet name"
       }
     },
     "workspaceId": {
@@ -75,7 +75,14 @@
     },
     "bashScriptBaseUri": {
       "type": "string",
-      "defaultValue": "https://github.com/repository/scriptbase/",
+      "defaultValue": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/cron-linux-vm/",
+      "metadata": {
+        "description": "Name of bash script (look at variables section for the URI that needs to be accessible to the Azure environment)"
+      }
+    },
+    "privateIpAddress": {
+      "type": "string",
+      "defaultValue": "10.16.0.4",
       "metadata": {
         "description": "Name of bash script (look at variables section for the URI that needs to be accessible to the Azure environment)"
       }
@@ -138,7 +145,8 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('privateIpAddress')]",
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
               },
@@ -207,11 +215,12 @@
             "enabled": true,
             "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob)]"
           }
-        },
+        }
+      },
         "resources": [
           {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmName'), '/Microsoft.EnterpriseCloud.Monitoring')]",
+            "type": "extensions",
+            "name": "[concat(variables('vmName'), '-monitoring')]",
             "apiVersion": "2017-12-01",
             "location": "[parameters('location')]",
             "dependsOn": [
@@ -232,9 +241,9 @@
           },
           {
             "name": "configure-cron-vm",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "type": "extensions",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2017-12-01",
             "dependsOn": [
               "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
             ],
@@ -247,8 +256,7 @@
               "typeHandlerVersion": "2.0",
               "autoUpgradeMinorVersion": true,
               "settings": {
-                "skipDos2Unix":false,
-                "timestamp":"123456789"
+                "skipDos2Unix":false
               },
               "protectedSettings": {
                  "commandToExecute": "configureCronVM.sh",
@@ -258,7 +266,6 @@
           }          
         ]
       }
-    }
   ],
   "outputs": {
     "hostname": {

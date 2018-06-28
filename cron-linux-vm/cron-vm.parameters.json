@@ -2,17 +2,17 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "vmName": {
+      "value": "vitocronvm01"
+    },
     "adminUsername": {
-      "value": "vito"
+      "value": "GEN-USERNAME"
     },
     "adminPassword": {
-      "value": "MySecret.1234"
+      "value": "GEN-PASSWORD"
     },
     "dnsLabelPrefix": {
-      "value": "vitolocentosvm"
-    },
-    "vmName": {
-      "value": "vitolocentosvm"
+      "value": "vitocronvm01"
     },
     "vnetRGname": {
       "value": "vitotestnetwork"
@@ -22,6 +22,21 @@
     },
     "subnetName": {
       "value": "softnas-cron-subnet"
+    },
+    "workspaceId": {
+      "value": "GET-WORKSPACE-ID"
+    },
+    "workspaceKey": {
+      "value": "GET-WORKSPACE-KEY"
+    },
+    "bashScriptName": {
+      "value": "configureCronVM.sh"
+    },
+    "bashScriptBaseUri": {
+      "value": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/cron-linux-vm/"
+    },
+    "privateIpAddress": {
+      "value": "10.16.0.4"
     }
   }
 }
