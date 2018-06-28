@@ -259,7 +259,7 @@
                 "skipDos2Unix":false
               },
               "protectedSettings": {
-                 "commandToExecute": "configureCronVM.sh",
+                 "commandToExecute": "[concat(parameters('bashScriptName'), ' ')]",
                  "fileUris": ["[variables('bashScriptUri')]"]
               }
             }
