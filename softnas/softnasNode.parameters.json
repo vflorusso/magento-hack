@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachineName": {
+            "value": "vitosoftnas01"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "adminUsername": {
+            "value": "vito"
+        },
+        "adminPassword": {
+            "value": null
+        },
+        "virtualNetworkRGName": {
+            "value": "string"
+        },
+        "virtualNetworkName": {
+            "value": "0vitosoftnas01-vnet"
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "workspaceId": {
+            "value": "GET-WORKSPACE-ID"
+        },
+        "workspaceKey": {
+            "value": "GET-WORKSPACE-KEY"
+        },
+        "bashScriptName": {
+            "value": "configureSoftnasNode.sh"
+        },
+        "bashScriptBaseUri": {
+            "value": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/softnas/"
+        },
+        "privateIpAddress": {
+            "value": "10.16.0.4"
+        }
+    }
+}
