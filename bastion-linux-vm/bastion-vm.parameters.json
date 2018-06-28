@@ -2,17 +2,17 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "vmName": {
+      "value": "vitobastionvm01"
+    },
     "adminUsername": {
-      "value": "vito"
+      "value": "GEN-USERNAME"
     },
     "adminPassword": {
-      "value": "MySecret.1234"
+      "value": "GEN-PASSWORD"
     },
     "dnsLabelPrefix": {
-      "value": "vitolocentosvm"
-    },
-    "vmName": {
-      "value": "vitolocentosvm"
+      "value": "vitobastionvm01"
     },
     "vnetRGname": {
       "value": "vitotestnetwork"
@@ -21,7 +21,19 @@
       "value": "st-prod-aks-vnet"
     },
     "subnetName": {
-      "value": "softnas-cron-subnet"
+      "value": "softnas-bastion-subnet"
+    },
+    "workspaceId": {
+      "value": "GET-WORKSPACE-ID"
+    },
+    "workspaceKey": {
+      "value": "GET-WORKSPACE-KEY"
+    },
+    "bashScriptName": {
+      "value": "configureBastionVM.sh"
+    },
+    "bashScriptBaseUri": {
+      "value": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/bastion-linux-vm/"
     }
   }
 }

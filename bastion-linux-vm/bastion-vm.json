@@ -20,24 +20,6 @@
         "description": "Password for the Virtual Machine."
       }
     },
-    "subnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Subnet name"
-      }
-    },
-    "vnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Vnet name"
-      }
-    },
-    "vnetRGname": {
-      "type": "string",
-      "metadata": {
-        "description": "Resource group containing the vnet"
-      }
-    },
     "dnsLabelPrefix": {
       "type": "string",
       "metadata": {
@@ -48,16 +30,54 @@
       "type": "string",
       "defaultValue": "7.4",
       "allowedValues": [
-        "7.0",
-        "7.1",
-        "7.2",
-        "7.2n",
-        "7.3",
-        "7.4",
-        "7.5"
+        "7.4"
       ],
       "metadata": {
         "description": "The CentOS version for the VM. This will pick a fully patched image of this given CentOS version."
+      }
+    },
+    "vnetRGname": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group containing the vnet"
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Vnet name"
+      }
+    },    
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet name"
+      }
+    },
+    "workspaceId": {
+      "type": "string",
+      "metadata": {
+        "description": "OMS Log Analytics workspace id"
+      }
+    },
+    "workspaceKey": {
+      "type": "string",
+      "metadata": {
+        "description": "OMS Log Analytics workspace key"
+      }
+    },    
+    "bashScriptName": {
+      "type": "string",
+      "defaultValue": "configureBastionVM.sh",
+      "metadata": {
+        "description": "Name of bash script (look at variables section for the URI that needs to be accessible to the Azure environment)"
+      }
+    },
+    "bashScriptBaseUri": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/bastion-linux-vm/",
+      "metadata": {
+        "description": "Name of bash script (look at variables section for the URI that needs to be accessible to the Azure environment)"
       }
     },
     "location": {
@@ -73,11 +93,12 @@
     "imageOffer": "CentOS",
     "nicName": "[concat(parameters('vmName'),'-nic')]",
     "diskType": "Premium_LRS",
+    "bashScriptUri": "[concat(parameters('bashScriptBaseUri'),parameters('bashScriptName'))]",
     "publicIPAddressName": "[concat(parameters('vmName'),'-ip')]",
     "publicIPAddressType": "Dynamic",
     "vmName": "[parameters('vmName')]",
     "vmSize": "Standard_DS3_v2",
-    "storageAccountName": "[concat(parameters('vmName'),'diags')]", 
+    "storageAccountName": "[concat(parameters('vmName'),'diags')]",
     "subnetRef": "[resourceId(parameters('vnetRGname'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
   },
   "resources": [
@@ -187,8 +208,56 @@
             "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob)]"
           }
         }
+      },
+        "resources": [
+          {
+            "type": "extensions",
+            "name": "[concat(variables('vmName'), '-monitoring')]",
+            "apiVersion": "2017-12-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+              "type": "OmsAgentForLinux",
+              "typeHandlerVersion": "1.0",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "workspaceId": "[parameters('workspaceId')]"
+              },
+              "protectedSettings": {
+                "workspaceKey": "[parameters('workspaceKey')]"
+              }
+            }
+          },
+          {
+            "name": "configure-cron-vm",
+            "type": "extensions",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2017-12-01",
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "tags": {
+              "displayName": "config-app"
+            },
+            "properties": {
+              "publisher": "Microsoft.Azure.Extensions",
+              "type": "CustomScript",
+              "typeHandlerVersion": "2.0",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "skipDos2Unix":false
+              },
+              "protectedSettings": {
+                 "commandToExecute": "[concat(parameters('bashScriptName'), ' ')]",
+                 "fileUris": ["[variables('bashScriptUri')]"]
+              }
+            }
+          }          
+        ]
       }
-    }
   ],
   "outputs": {
     "hostname": {
