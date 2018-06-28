@@ -1,0 +1,30 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dnsNamePrefix": {
+      "value": "contoso5"
+    },
+    "sshRSAPublicKey": {
+      "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACA"
+    },
+    "agentCount": {
+      "value": 1
+    },
+    "agentVMSize": {
+      "value": "Standard_DS2_v2"
+    },
+    "osDiskSizeGB": {
+      "value": 30
+    },
+    "ServicePrincipalClientID": {
+      "value": "FIXME"
+    },  
+    "ServicePrincipalClientSecret": {
+      "value": "FIXME"
+    },
+    "vmSubnetID": {
+      "value": "FIXMEt"
+    }
+  }
+}
