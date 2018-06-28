@@ -21,16 +21,22 @@
       "metadata": {
         "description": "The address prefix of the axisting subnet."
       }
+    },
+    "nsg":
+    {
+      "type": "object",
+      "metadata":{
+        "description": "network security groups settings"
+      }
     }
   },
   "variables": {
-    "nsgName": "new-nsg"
   },
   "resources": [
     {
       "type": "Microsoft.Network/virtualNetworks/subnets",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkSecurityGroups/',variables('nsgName'))]"
+        "[concat('Microsoft.Network/networkSecurityGroups/',parameters('nsg').nsgName)]"
       ],
       "apiVersion": "2018-06-01",
       "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
@@ -38,46 +44,17 @@
       "properties": {
         "addressPrefix": "[parameters('addressPrefix')]",
         "networkSecurityGroup": {
-          "id": "[resourceId('Microsoft.Network/networkSecurityGroups/',variables('nsgName'))]"
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups/',parameters('nsg').nsgName)]"
         }
       }
     },
     {
       "type": "Microsoft.Network/networkSecurityGroups",
-      "name": "[variables('nsgName')]",
+      "name": "[parameters('nsg').nsgName]",
       "location": "[resourceGroup().location]",
       "apiVersion": "2018-06-01",
       "properties": {
-        "securityRules": [
-          {
-            "name": "SSH",
-            "properties": {
-              "description": "Allows SSH traffic",
-              "protocol": "Tcp",
-              "sourcePortRange": "*",
-              "destinationPortRange": "22",
-              "sourceAddressPrefix": "*",
-              "destinationAddressPrefix": "*",
-              "access": "Allow",
-              "priority": 100,
-              "direction": "Inbound"
-            }
-          },
-          {
-            "name": "HTTPS",
-            "properties": {
-              "description": "Allows HTTPS traffic",
-              "protocol": "Tcp",
-              "sourcePortRange": "*",
-              "destinationPortRange": "443",
-              "sourceAddressPrefix": "*",
-              "destinationAddressPrefix": "*",
-              "access": "Allow",
-              "priority": 101,
-              "direction": "Inbound"
-            }
-          }
-        ]
+        "securityRules": "[parameters('nsg').nsgRules]"
       }
     }
   ],

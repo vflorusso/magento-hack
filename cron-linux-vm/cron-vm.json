@@ -93,7 +93,7 @@
     "imageOffer": "CentOS",
     "nicName": "[concat(parameters('vmName'),'-nic')]",
     "diskType": "Premium_LRS",
-    "bashScriptUri": "[concat(parameters('bashScriptBaseUri'),parameters('bashScriptName')]",
+    "bashScriptUri": "[concat(parameters('bashScriptBaseUri'),parameters('bashScriptName'))]",
     "publicIPAddressName": "[concat(parameters('vmName'),'-ip')]",
     "publicIPAddressType": "Dynamic",
     "vmName": "[parameters('vmName')]",
@@ -248,11 +248,11 @@
               "autoUpgradeMinorVersion": true,
               "settings": {
                 "skipDos2Unix":false,
-                "timestamp":"123456789",          
+                "timestamp":"123456789"
               },
               "protectedSettings": {
                  "commandToExecute": "configureCronVM.sh",
-                 "fileUris": ["[variables('bashScriptUri')]"]  
+                 "fileUris": ["[variables('bashScriptUri')]"]
               }
             }
           }          
