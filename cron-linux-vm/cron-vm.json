@@ -20,12 +20,6 @@
         "description": "Password for the Virtual Machine."
       }
     },
-    "dnsLabelPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
-      }
-    },
     "centOSversion": {
       "type": "string",
       "defaultValue": "7.4",
@@ -101,8 +95,6 @@
     "nicName": "[concat(parameters('vmName'),'-nic')]",
     "diskType": "Premium_LRS",
     "bashScriptUri": "[concat(parameters('bashScriptBaseUri'),parameters('bashScriptName'))]",
-    "publicIPAddressName": "[concat(parameters('vmName'),'-ip')]",
-    "publicIPAddressType": "Dynamic",
     "vmName": "[parameters('vmName')]",
     "vmSize": "Standard_DS3_v2",
     "storageAccountName": "[concat(parameters('vmName'),'diags')]",
@@ -122,23 +114,10 @@
     },
     {
       "apiVersion": "2017-10-01",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-        "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsLabelPrefix')]"
-        }
-      }
-    },
-    {
-      "apiVersion": "2017-10-01",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
       ],
       "properties": {
         "ipConfigurations": [
@@ -147,9 +126,6 @@
             "properties": {
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('privateIpAddress')]",
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
-              },
               "subnet": {
                 "id": "[variables('subnetRef')]"
               }
@@ -268,13 +244,5 @@
       }
   ],
   "outputs": {
-    "hostname": {
-      "type": "string",
-      "value": "[reference(variables('publicIPAddressName')).dnsSettings.fqdn]"
-    },
-    "sshCommand": {
-      "type": "string",
-      "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
-    }
   }
 }
