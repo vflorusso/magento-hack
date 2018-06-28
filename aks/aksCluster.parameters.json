@@ -1,0 +1,30 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dnsNamePrefix": {
+      "value": "magento"
+    },
+    "sshRSAPublicKey": {
+      "value": "Fixme with ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACA..."
+    },
+    "agentCount": {
+      "value": 3
+    },
+    "agentVMSize": {
+      "value": "Standard_DS4_v2"
+    },
+    "osDiskSizeGB": {
+      "value": 64
+    },
+    "ServicePrincipalClientID": {
+      "value": "FIXME"
+    },  
+    "ServicePrincipalClientSecret": {
+      "value": "FIXME"
+    },
+    "vmSubnetID": {
+      "value": "FIXME"
+    }
+  }
+}

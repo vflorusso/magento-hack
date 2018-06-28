@@ -89,6 +89,16 @@
       "metadata": {
         "description": "Location for all resources."
       }
+    },
+    "secretObject1": {
+      "type": "string",
+      "defaultValue": "Give your secret a name"
+    },
+    "secretObject1Value": {
+      "type": "securestring",
+      "metadata": {
+        "description": "This is your stored secret"
+      }
     }
   },
   "resources": [
@@ -116,7 +126,23 @@
           "name": "[parameters('skuName')]",
           "family": "A"
         }
-      }
+      },
+      "resources": [
+        {
+          "type": "secrets",
+          "name": "[parameters('secretObject1')]",
+          "apiVersion": "2015-06-01",
+          "tags": {
+            "displayName": "[parameters('secretObject1')]"
+          },
+          "properties": {
+            "value": "[parameters('secretObject1Value')]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+          ]
+        }
+      ]
     }
   ]
 }
