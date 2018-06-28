@@ -235,7 +235,7 @@
                 "skipDos2Unix":false
               },
               "protectedSettings": {
-                 "commandToExecute": "[concat(parameters('bashScriptName'), ' ')]",
+                 "commandToExecute": "[concat('./',parameters('bashScriptName'))]",
                  "fileUris": ["[variables('bashScriptUri')]"]
               }
             }
