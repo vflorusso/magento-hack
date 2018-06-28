@@ -139,7 +139,7 @@
             "value": "[parameters('secretObject1Value')]"
           },
           "dependsOn": [
-            "[concat('Microsoft.KeyVault/vaults/', parameters('keyvaultID'))]"
+            "[concat('Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
           ]
         }
       ]
