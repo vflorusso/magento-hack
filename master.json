@@ -91,7 +91,9 @@
             "apiVersion": "2017-05-10",
             "resourceGroup": "[variables('cronvm-rg')]",
             "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/loganalytics')]"
+                "[concat('Microsoft.Resources/deployments/loganalytics')]",
+                "[concat('Microsoft.Resources/deployments/networking')]"
+
             ],
             "properties": {
                 "templateLink": {
