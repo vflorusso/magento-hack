@@ -137,7 +137,7 @@
           "dependsOn": [
             "[concat('Microsoft.Network/virtualNetworks/', parameters('vnet1Name'))]",
             "[concat('Microsoft.Network/virtualNetworks/', parameters('vnet2Name'))]"
-          ],          
+          ],
           "properties": {
             "allowVirtualNetworkAccess": true,
             "allowForwardedTraffic": false,
@@ -148,7 +148,7 @@
             }
           }
         }
-      ]      
+      ]
     },
     {
       "apiVersion": "2018-02-01",
@@ -182,7 +182,7 @@
           "dependsOn": [
             "[concat('Microsoft.Network/virtualNetworks/', parameters('vnet1Name'))]",
             "[concat('Microsoft.Network/virtualNetworks/', parameters('vnet2Name'))]"
-          ],          
+          ],
           "properties": {
             "allowVirtualNetworkAccess": true,
             "allowForwardedTraffic": false,
@@ -195,5 +195,15 @@
         }
       ]
     }
-  ]
+  ],
+  "outputs": {
+    "aksSubnetId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet2Name'), parameters('vnet2subnet1Name'))]"
+    },
+    "aksSubnetPrefix": {
+      "type": "string",
+      "value": "[ parameters('vnet2subnet1Prefix')]"
+    }
+  }
 }
