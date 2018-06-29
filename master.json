@@ -1,0 +1,156 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "tenant": {
+            "type": "string",
+            "defaultValue": "tenant01",
+            "metadata": {
+                "description": "name of the deployment tenant"
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Deployment location. Defaults to resource group location"
+            }
+        },
+        "linkedTemplatesBaseUri": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/",
+            "metadata": {
+                "description": "Base uri where to pull templates from"
+            }
+        },
+        "networkParameters": {
+            "type": "object",
+            "metadata": {
+                "description": "Network parameters"
+            }
+        },
+        "cronVMparameters": {
+            "type": "object",
+            "metadata": {
+                "description": "Cron VM parameters"
+            }
+        }
+    },
+    "variables": {
+        "loganalytics-uri": "[concat(parameters('linkedTemplatesBaseUri'), 'loganalytics/loganalytics.json')]",
+        "loganalytics-param-uri": "[concat(parameters('linkedTemplatesBaseUri'), 'loganalytics/loganalytics.parameters.json')]",
+        "network-uri": "[concat(parameters('linkedTemplatesBaseUri'), 'networking/vnets.json')]",
+        "cronvm-uri": "[concat(parameters('linkedTemplatesBaseUri'), 'cron-linux-vm/cron-vm.json')]",
+        "network-rg": "vitotestnetwork",
+        "cronvm-rg": "vitotestcronvm",
+        "loganalytics-rg": "vitotestloganalytics"
+    },
+    "resources": [
+        {
+            "name": "networking",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "resourceGroup": "[variables('network-rg')]",
+            "properties": {
+                "templateLink": {
+                    "uri": "[variables('network-uri')]"
+                },
+                "parameters": "[parameters('networkParameters')]",
+                "mode": "Incremental",
+                "debugSetting": {
+                    "detailLevel": "none"
+                }
+            }
+        },
+        {
+            "name": "loganalytics",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "resourceGroup": "[variables('loganalytics-rg')]",
+            "properties": {
+                "templateLink": {
+                    "uri": "[variables('loganalytics-uri')]"
+                },
+                "parameters": {
+                    "name": {
+                        "value": "vitotestloganalytics"
+                    },
+                    "sku": {
+                        "value": "Standard"
+                    }                    
+                },
+                "mode": "Incremental",
+                "debugSetting": {
+                    "detailLevel": "none"
+                }
+            }
+        },
+        {
+            "name": "cronvm",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "resourceGroup": "[variables('cronvm-rg')]",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/loganalytics')]"
+            ],
+            "properties": {
+                "templateLink": {
+                    "uri": "[variables('cronvm-uri')]"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[parameters('cronVMparameters').vmName.value]"
+                      },
+                      "adminUsername": {
+                        "value": "[parameters('cronVMparameters').adminUsername.value]"
+                      },
+                      "adminPassword": {
+                        "value": "[parameters('cronVMparameters').adminPassword.value]"
+                      },
+                      "vnetRGname": {
+                        "value": "[variables('network-rg')]"
+                      },
+                      "vnetName": {
+                        "value": "[parameters('networkParameters').vnet1Name.value]"
+                      },
+                      "subnetName": {
+                        "value": "[parameters('networkParameters').vnet1subnet1Name.value]"
+                      },
+                      "workspaceId": {
+                        "value": "[reference('loganalytics').outputs.workspaceId.value]"
+                      },
+                      "workspaceKey": {
+                        "value": "[reference('loganalytics').outputs.workspaceKeys.value.primarySharedKey]"
+                      },
+                      "bashScriptName": {
+                        "value": "configureCronVM.sh"
+                      },
+                      "bashScriptBaseUri": {
+                        "value": "[concat(parameters('linkedTemplatesBaseUri'),'cron-linux-vm/')]"
+                      },
+                      "privateIpAddress": {
+                        "value": "[parameters('cronVMparameters').privateIpAddress.value]"
+                      }
+                },
+                "mode": "Incremental",
+                "debugSetting": {
+                    "detailLevel": "none"
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "workspaceId": {
+            "type": "string",
+            "value": "[reference('loganalytics').outputs.workspaceId.value]"
+        },
+        "workspaceKeys": {
+            "type": "object",
+            "value": "[reference('loganalytics').outputs.workspaceKeys.value]"
+        },
+        "vmName": {
+            "type": "string",
+            "value": "[parameters('cronVMparameters').vmName.value]"
+        }
+    }
+}

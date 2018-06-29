@@ -1,0 +1,93 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "tenant": {
+            "value": "vitotenant01"
+        },
+        "linkedTemplatesBaseUri": {
+            "value": "https://raw.githubusercontent.com/vflorusso/magento-hack/master/"
+        },
+        "networkParameters":
+        {
+            "value":
+            {
+                "vnet1Name": {
+                    "value": "st-prod-softnas-cron-ew-vnet"
+                },
+                "vnet1AddressPrefix": {
+                    "value": "10.0.0.0/12"
+                },
+                "vnet1subnet1Name": {
+                    "value": "softnas-cron-subnet"
+                },
+                "vnet1subnet1Prefix": {
+                    "value": "10.0.0.0/24"
+                },
+                "vnet1subnet2Name": {
+                    "value": "bastian-subnet"
+                },
+                "vnet1subnet2Prefix": {
+                    "value": "10.0.1.0/24"
+                },
+                "vnet1subnet3Name": {
+                    "value": "third-subnet"
+                },
+                "vnet1subnet3Prefix": {
+                    "value": "10.0.2.0/24"
+                },
+                "vnet2Name": {
+                    "value": "st-prod-aks-vnet"
+                },
+                "vnet2AddressPrefix": {
+                    "value": "11.0.0.0/12"
+                },
+                "vnet2subnet1Name": {
+                    "value": "st-prod-aks-subnet"
+                },
+                "vnet2subnet1Prefix": {
+                    "value": "11.0.0.0/16"
+                }
+            }
+        },
+        "cronVMparameters":
+        {
+            "value": 
+            {
+                "vmName": {
+                    "value": "vitocronvm01"
+                  },
+                  "adminUsername": {
+                    "value": "vito"
+                  },
+                  "adminPassword": {
+                    "value": "Mysecret.1234"
+                  },
+                  "vnetRGname": {
+                    "value": "GET-FROM-NETWORK"
+                  },
+                  "vnetName": {
+                    "value": "GET-FROM-NETWORK"
+                  },
+                  "subnetName": {
+                    "value": "GET-FROM-NETWORK"
+                  },
+                  "workspaceId": {
+                    "value": "GET-WORKSPACE-ID"
+                  },
+                  "workspaceKey": {
+                    "value": "GET-WORKSPACE-KEY"
+                  },
+                  "bashScriptName": {
+                    "value": "configureCronVM.sh"
+                  },
+                  "bashScriptBaseUri": {
+                    "value": "CONCAT-IN-MASTER"
+                  },
+                  "privateIpAddress": {
+                    "value": "10.0.0.4"
+                  }
+            }
+        }
+    }
+}
